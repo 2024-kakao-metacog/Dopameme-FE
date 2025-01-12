@@ -1,10 +1,12 @@
-import React from "react";
-import "./App.css";
+import React from 'react';
+import './App.css';
 
 function App() {
   return (
-    <div className="App bg-black h-screen w-screen">
-      <div className="bg-red-500 w-full h-10"></div>
+    <div className="App h-screen w-screen bg-black">
+      <div className="h-10 w-full flex-row">
+        <text className="text-white">Dopameme</text>
+      </div>
     </div>
   );
 }
