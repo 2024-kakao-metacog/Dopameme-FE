@@ -1,0 +1,90 @@
+/* Player.module.css */
+.custom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 0.2rem;
+  background: linear-gradient(
+    to right,
+    #ffdd00 0%,
+    #ffdd00 var(--value),
+    rgba(221, 221, 221, 0.5) var(--value),
+    rgba(221, 221, 221, 0.5) 100%
+  );
+  border-radius: 0.2rem;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: #ffdd00;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.custom-slider:hover::-webkit-slider-thumb {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+/* Webkit 기반 브라우저 */
+input[type="range"].custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: #ffdd00;
+  border-radius: 50%;
+  opacity: 0; /* 기본 숨김 */
+  pointer-events: none; /* 클릭 방지 */
+  transform: scale(0); /* 크기 0으로 */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+input[type="range"].custom-slider:hover::-webkit-slider-thumb {
+  opacity: 1; /* 마우스 호버 시 나타남 */
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+/* Firefox */
+input[type="range"].custom-slider::-moz-range-thumb {
+  width: 0.7rem;
+  height: 0.7rem;
+  background: #ffdd00;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+input[type="range"].custom-slider:hover::-moz-range-thumb {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+/* Microsoft Edge 및 IE */
+input[type="range"].custom-slider::-ms-thumb {
+  width: 0.7rem;
+  height: 0.7rem;
+  background: #ffdd00;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+input[type="range"].custom-slider:hover::-ms-thumb {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
