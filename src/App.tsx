@@ -1,13 +1,15 @@
 import React from 'react';
-import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import Main from './pages/main';
+import Shorts from './pages/shorts';
 
 function App() {
   return (
-    <div className="App h-screen w-screen bg-black">
-      <div className="h-10 w-full flex-row">
-        <text className="text-white">Dopameme</text>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<Main />}>
+        <Route path="shorts" element={<Shorts />} />
+      </Route>
+    </Routes>
   );
 }
 
