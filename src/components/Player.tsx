@@ -155,13 +155,6 @@ function Player({ src, autoplay = false }: PlayerProps) {
         setPreviousVolume(volume > 0 ? volume : previousVolume);
         setVolume(0);
       }
-
-      console.log('After toggle:', {
-        muted: videoRef.current.muted,
-        volume: videoRef.current.volume,
-        previousVolume,
-        currentVolume: volume,
-      });
     }
   }
 
