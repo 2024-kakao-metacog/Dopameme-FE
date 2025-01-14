@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         'kakao-yellow': '#FAE100',
+        'dopameme-bg': '#0F0F0F',
       },
     },
   },
