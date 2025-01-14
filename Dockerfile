@@ -13,5 +13,5 @@ EXPOSE 3000
 CMD [ "yarn", "start" ]
 
 
-# docker build -t dopameme-web .
-# docker run -v ${PWD}/src:/src/src:ro -d -p 3001:3000 --name dopameme-web dopameme-image
+# docker build -t dopameme-image .
+# docker run -v ${PWD}/src:/app/src:ro -d -p 3001:3000 --name dopameme-web dopameme-image
