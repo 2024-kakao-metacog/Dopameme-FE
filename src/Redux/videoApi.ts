@@ -33,11 +33,11 @@ interface VideoApiResponseItem {
 // RTK Query API 정의
 export const videoApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: API_URL, // .env 파일에서 가져온 API URL
+    baseUrl: API_URL + 'v1/video/metadata/list',
   }),
   endpoints: builder => ({
     getVideos: builder.query<Video[], void>({
-      query: () => '', // API 엔드포인트 경로
+      query: () => '',
       transformResponse: (response: VideoApiResponseItem[]): Video[] => {
         return response
           .filter(item => item.snippet)
