@@ -1,33 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { addVideos } from './videoSlice'; // Slice의 액션
 import API_URL from '../config/env';
+import { Video } from '../types/Video'; // 비디오 정보 타입
 
-export interface Video {
-  videoId: string; // 비디오 ID
-  title: string; // 제목
-  videoUrl: string; // 비디오 URL
-  thumbnailUrl: string; // 썸네일 URL
-  publishedAt: number; // 게시 날짜 (Unix 타임스탬프)
-  userId: string; // 사용자 ID
-  userNickname: string; // 사용자 닉네임
-  isOwner: boolean; // 현재 사용자가 소유자인지 여부
-  isSubscribed: boolean; // 구독 여부
-  canSubscribe: boolean; // 구독 가능 여부
-}
-
-interface VideoApiResponseItem {
-  snippet: {
-    videoId: string; // 비디오 ID
-    title: string; // 제목
-    videoUrl: string; // 비디오 URL
-    thumbnailUrl: string; // 썸네일 URL
-    publishedAt: number; // 게시 날짜 (Unix 타임스탬프)
-    userId: string; // 사용자 ID
-    userNickname: string; // 사용자 닉네임
-    isOwner: boolean; // 현재 사용자가 소유자인지 여부
-    isSubscribed: boolean; // 구독 여부
-    canSubscribe: boolean; // 구독 가능 여부
-  };
+interface VideoApiPorps {
+  snippet: Video;
 }
 
 // RTK Query API 정의
@@ -38,7 +15,7 @@ export const videoApi = createApi({
   endpoints: builder => ({
     getVideos: builder.query<Video[], void>({
       query: () => '',
-      transformResponse: (response: VideoApiResponseItem[]): Video[] => {
+      transformResponse: (response: VideoApiPorps[]): Video[] => {
         return response
           .filter(item => item.snippet)
           .map(item => ({
