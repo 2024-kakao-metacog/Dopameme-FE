@@ -27,26 +27,25 @@ function App() {
 
   return (
     <div className="flex h-screen w-screen">
-      <div className="flex flex-row w-full h-full">
+      <div className="flex size-full flex-row">
         {/* <Link>는 <a>와 동일한 역할 */}
-        <div className="flex flex-col inset-y-0 left-0 w-1/5">
-          <Link to="/" className="h-1/3 bg-dopameme-bg">
-            <span className="text-kakao-yellow">main</span>
-          </Link>
-          <Link to="/ReduxTest" className="h-1/3 bg-dopameme-bg">
-            <span className="text-kakao-yellow">reduxtest</span>
-          </Link>
-          <div className="h-1 bg-white"></div>
-          <span className="w-full h-full bg-dopameme-bg text-kakao-yellow">메뉴바</span>
-        </div>
-        <div className="flex w-1 bg-white"></div>
-        <div className="flex p-[0.625rem] justify-center items-center space-x-[0.625rem] h-full w-full bg-dopameme-bg">
-          {storedVideos.map(video => (
-            <Link key={video.videoId} to="/shorts" className="rounded-lg overflow-hidden">
-              <VideoBotton src={video.videoUrl} />
-              <span className="flex text-white">{video.title}</span>
+        <div className="flex size-full items-center justify-center space-x-2.5 bg-dopameme-bg p-2.5">
+          {[...storedVideos, ...Array(4 - storedVideos.length).fill(null)].map((video, index) => (
+            <Link key={video?.videoId || `placeholder-${index}`} to={video ? '/shorts' : '#'}>
+              <div className="relative aspect-[9/16] w-[min(30vw,36rem)] max-w-full overflow-hidden rounded-lg">
+                {video ? (
+                  <VideoBotton videoUrl={video.videoUrl} thumbnailUrl={video.thumbnailUrl} />
+                ) : (
+                  // Placeholder 썸네일 또는 빈 상태 표시
+                  <div className="flex size-full items-center justify-center bg-gray-800">
+                    <span className="text-white">No Video</span>
+                  </div>
+                )}
+              </div>
+              <span className="flex text-white">{video?.title || 'Empty Slot'}</span>
             </Link>
           ))}
+
           <Outlet />
         </div>
       </div>

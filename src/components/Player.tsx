@@ -164,23 +164,23 @@ function Player({ src, autoplay = false }: PlayerProps) {
   }
 
   return (
-    <div className="relative bg-black rounded-lg overflow-hidden shadow-lg w-full h-full" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeavePlayer}>
+    <div className="relative size-full overflow-hidden rounded-lg bg-black shadow-lg" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeavePlayer}>
       {/* Video Element */}
-      <video ref={videoRef} className="w-full h-full object-contain" onTimeUpdate={handleTimeUpdate} onClick={togglePlayPause} onEnded={handleVideoEnded} autoPlay={autoplay} />
+      <video ref={videoRef} className="size-full object-contain" onTimeUpdate={handleTimeUpdate} onClick={togglePlayPause} onEnded={handleVideoEnded} autoPlay={autoplay} />
 
       {/* Central Play/Pause Button */}
       <button
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/70 text-kakao-yellow text-[3rem] rounded-full w-[6.25rem] h-[6.25rem] flex items-center justify-center transition-opacity duration-1000 ${
-          showPlayPauseButton ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`absolute left-1/2 top-1/2 flex size-[6.25rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-[3rem] text-kakao-yellow transition-opacity duration-1000 ${
+          showPlayPauseButton ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={togglePlayPause}
       >
         {isPlaying ? (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="pointer-events-none w-12 h-12 fill-current" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="pointer-events-none size-12 fill-current" aria-hidden="true">
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
           </svg>
         ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="pointer-events-none w-12 h-12 fill-current" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="pointer-events-none size-12 fill-current" aria-hidden="true">
             <path d="m7 4 12 8-12 8V4z"></path>
           </svg>
         )}
@@ -188,26 +188,26 @@ function Player({ src, autoplay = false }: PlayerProps) {
 
       {/* Volume Control - 상단 */}
       <div
-        className={`absolute top-0 left-0 right-0 p-2 transition-opacity duration-700 ${mousePosition === 'top' && showControls ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`absolute inset-x-0 top-0 p-2 transition-opacity duration-700 ${mousePosition === 'top' && showControls ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
         onMouseEnter={() => setShowVolumeSlider(true)}
         onMouseLeave={() => setShowVolumeSlider(false)}
       >
-        <div className={`flex items-center space-x-4 rounded-full transition-all duration-700 bg-black/50 ${showVolumeSlider ? 'p-2 lg:w-64 md:w-48 sm:w-32' : 'p-2 w-12'}`}>
+        <div className={`flex items-center space-x-4 rounded-full bg-black/50 transition-all duration-700 ${showVolumeSlider ? 'p-2 sm:w-32 md:w-48 lg:w-64' : 'w-12 p-2'}`}>
           {/* Mute Button */}
-          <button onClick={toggleMute} className="flex items-center justify-center p-2 w-8 h-8 text-white rounded-full hover:bg-gray-500 transition">
+          <button onClick={toggleMute} className="flex size-8 items-center justify-center rounded-full p-2 text-white transition hover:bg-gray-500">
             {videoRef.current?.muted ? (
               // 뮤트O SVG
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" className="pointer-events-none w-8 h-8 fill-kakao-yellow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" className="pointer-events-none size-8 fill-kakao-yellow">
                 <path d="M14 9.71V7.62c2 .46 3.5 2.24 3.5 4.38 0 .58-.13 1.13-.33 1.64l-1.67-1.67c-.02-1.01-.63-1.88-1.5-2.26zM19 12c0 1-.26 1.94-.7 2.77l1.47 1.47C20.54 15.01 21 13.56 21 12c0-4.08-3.05-7.44-7-7.93v2.02c2.83.48 5 2.94 5 5.91zM3.15 3.85l4.17 4.17L6.16 9H3v6h3.16L12 19.93v-7.22l2 2v1.67c.43-.1.83-.27 1.2-.48l1.09 1.09c-.68.45-1.45.78-2.28.92v2.02c1.39-.17 2.66-.71 3.73-1.49l2.42 2.42.71-.71-17-17-.72.7zm8.85.22L9.62 6.08 12 8.46V4.07z"></path>
               </svg>
             ) : volume <= 0.5 ? (
               // 뮤트X 볼륨 0.5 이하 SVG
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" className="pointer-events-none w-8 h-8 fill-kakao-yellow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" className="pointer-events-none size-8 fill-kakao-yellow">
                 <path d="M17.5 12c0 2.14-1.5 3.92-3.5 4.38v-2.09c.88-.39 1.5-1.27 1.5-2.29s-.62-1.9-1.5-2.29V7.62c2 .46 3.5 2.24 3.5 4.38zM3 9v6h3.16L12 19.93V4.07L6.16 9H3z"></path>
               </svg>
             ) : (
               // 뮤트X 볼륨 0.5 초과 SVG
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" className="pointer-events-none w-8 h-8 fill-kakao-yellow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" className="pointer-events-none size-8 fill-kakao-yellow">
                 <path d="M21 12c0 4.08-3.05 7.44-7 7.93v-2.02c2.83-.48 5-2.94 5-5.91s-2.17-5.43-5-5.91V4.07c3.95.49 7 3.85 7 7.93zM3 9v6h3.16L12 19.93V4.07L6.16 9H3zm11-1.38v2.09c.88.39 1.5 1.27 1.5 2.29s-.62 1.9-1.5 2.29v2.09c2-.46 3.5-2.24 3.5-4.38S16 8.08 14 7.62z"></path>
               </svg>
             )}
@@ -241,8 +241,8 @@ function Player({ src, autoplay = false }: PlayerProps) {
 
       {/* Video Progress Bar - 하단 */}
       <div
-        className={`absolute bottom-0 left-0 right-0 text-white p-1 transition-opacity duration-1000 ${
-          mousePosition === 'bottom' && showControls ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`absolute inset-x-0 bottom-0 p-1 text-white transition-opacity duration-1000 ${
+          mousePosition === 'bottom' && showControls ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
         <div className="flex items-center space-x-4">
