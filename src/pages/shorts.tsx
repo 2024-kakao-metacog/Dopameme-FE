@@ -8,7 +8,7 @@ function App() {
         <div className="absolute bottom-6 left-1 text-white px-4 py-2 rounded-lg z-10" style={{ fontSize: '1.5vw' }}>
           이것은 제목입니다
         </div>
-        <Player src="여기는 URL 자리" autoplay={false} />
+        <Player src="http://192.168.1.178:8080//hObAvaxlQ7o.mp4-manifest.mpd" autoplay={false} />
       </div>
     </div>
   );
