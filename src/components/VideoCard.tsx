@@ -16,16 +16,16 @@ interface VideoCardProps {
 function VideoCard({ video }: VideoCardProps) {
   return (
     <div className="flex h-full w-1/4 items-center justify-center px-2">
-      <div className="flex h-auto w-full flex-col space-y-2 ">
+      <div className="flex h-auto w-full flex-col space-y-2">
         {/* 비디오 버튼 */}
-        <div className="flex aspect-[9/16] h-auto w-full overflow-hidden rounded-xl ">
-          <Link key={video?.videoId || 'placeholder'} to={video ? '/shorts' : '#'}>
+        <div className="flex aspect-[9/16] h-auto w-full overflow-hidden rounded-xl">
+          <Link to={`/shorts?videoUrl=${encodeURIComponent(video?.videoUrl || '')}`}>
             {video ? <VideoBotton videoUrl={video.videoUrl} thumbnailUrl={video.thumbnailUrl} /> : <span className="bg-gray-500 text-white">No Video</span>}
           </Link>
         </div>
 
         {/* 제목 */}
-        <div className="flex h-auto w-full text-sm text-white md:text-lg lg:text-xl">
+        <div className="flex h-auto w-full pl-2.5 pr-10 text-sm text-white md:text-lg lg:text-xl">
           <span className="overflow-hidden truncate">{video?.title || 'Empty Slot'}</span>
         </div>
       </div>
