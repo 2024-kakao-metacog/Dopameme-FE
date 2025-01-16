@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import styles from '../player.module.css';
+import styles from '../data/player.module.css';
 import dashjs from 'dashjs';
 
 interface PlayerProps {
@@ -166,7 +166,7 @@ function Player({ src, autoplay = false }: PlayerProps) {
   return (
     <div className="relative size-full overflow-hidden rounded-lg bg-black shadow-lg" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeavePlayer}>
       {/* Video Element */}
-      <video ref={videoRef} className="size-full object-contain" onTimeUpdate={handleTimeUpdate} onClick={togglePlayPause} onEnded={handleVideoEnded} autoPlay={autoplay} />
+      <video ref={videoRef} className="size-full object-cover" onTimeUpdate={handleTimeUpdate} onClick={togglePlayPause} onEnded={handleVideoEnded} autoPlay={autoplay} />
 
       {/* Central Play/Pause Button */}
       <button
