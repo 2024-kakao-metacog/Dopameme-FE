@@ -4,12 +4,15 @@ import Main from './pages/main';
 import Shorts from './pages/shorts';
 import Login from './pages/login';
 import Signup from './pages/signup';
+import Layout from './pages/layout';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Main />} />
-      <Route path="shorts" element={<Shorts />} />
+      <Route path="/" element={<Layout />}>
+        <Route path="main" element={<Main />} />
+        <Route path="shorts" element={<Shorts />} />
+      </Route>
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
     </Routes>
