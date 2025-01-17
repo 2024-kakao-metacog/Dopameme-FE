@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { addVideos } from './videoSlice'; // Slice의 액션
-import API_URL from '../config/env';
-import { Video } from '../types/Video'; // 비디오 정보 타입
+import API_URL from '../../config/env';
+import { Video } from '../../types/Video'; // 비디오 정보 타입
 
 interface VideoApiPorps {
   snippet: Video;

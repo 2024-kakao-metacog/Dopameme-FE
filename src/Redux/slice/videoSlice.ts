@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Video } from '../types/Video';
+import { Video } from '../../types/Video';
 
 interface VideoState {
   videos: Video[];
