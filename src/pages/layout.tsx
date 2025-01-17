@@ -18,7 +18,7 @@ function App() {
             <Link to="/login">
               <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">로그인</div>
             </Link>
-            <Link to="/main">
+            <Link to="/notice">
               <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">알림</div>
             </Link>
           </div>
@@ -64,7 +64,7 @@ function App() {
         </div>
       </div>
       {/* contents area */}
-      <div className="flex-1">
+      <div className="size-full flex-1">
         <Outlet />
       </div>
     </div>
