@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="flex h-screen w-screen items-center bg-dopameme-bg ">
+    <div className="flex h-screen w-screen items-center overflow-hidden bg-dopameme-bg">
       {/* menu bar */}
       <div className="flex h-full w-[200px] flex-col border-r-2 border-white px-4 py-3">
         <div className="overflow-auto scrollbar-hide">
