@@ -36,7 +36,7 @@ function App() {
   };
 
   return (
-    <div className="flex size-full items-center justify-center bg-dopameme-bg">
+    <div className="bg-dopameme-bg flex size-full items-center justify-center">
       {/* 영상존 div */}
       <div className="relative flex min-h-[510px] min-w-[294px]  justify-center p-4" style={{ width: dimensions.width, height: dimensions.height }}>
         {/* 동영상 div */}

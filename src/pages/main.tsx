@@ -26,8 +26,8 @@ function App() {
   if (isError) return <p>Error loading videos!</p>;
 
   return (
-    <div className="flex h-auto w-full">
-      <div className="flex h-full min-w-[1024px] flex-row items-center justify-center bg-dopameme-bg p-4">
+    <div className="bg-dopameme-bg flex size-full items-center justify-center">
+      <div className="flex size-full min-w-[1024px] flex-row p-4">
         {/* VideoCard 컴포넌트를 동적으로 렌더링 */}
         {storedVideos.slice(0, 4).map((video, index) => (
           <VideoCard key={video?.videoId || `placeholder-${index}`} video={video} />
