@@ -175,7 +175,7 @@ function Player({ src, autoplay = false }: PlayerProps) {
 
       {/* Central Play/Pause Button */}
       <button
-        className={`text-kakao-yellow absolute left-1/2 top-1/2 flex size-[6.25rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-[3rem] transition-opacity duration-1000 ${
+        className={`absolute left-1/2 top-1/2 flex size-[6.25rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-[3rem] text-kakao-yellow transition-opacity duration-1000 ${
           showPlayPauseButton ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={togglePlayPause}

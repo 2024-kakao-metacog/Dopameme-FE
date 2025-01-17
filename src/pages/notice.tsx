@@ -14,7 +14,7 @@ function App() {
           <div className="mb-2 flex h-32 w-full min-w-[700px] max-w-[1000px] rounded-lg bg-menubar-highlight p-3">
             {/* 동영상 정보  */}
             <div className="flex size-full flex-1 flex-col px-1.5">
-              <div className="flex h-full overflow-hidden  pb-4">
+              <div className="flex h-full overflow-hidden pb-4">
                 <p className="line-clamp-2 text-2xl text-white">제목 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅁㄴㅁㄴㄻㅇㅁㄹㅊㅍㅌ퓬ㅇㅎㄹㅇㄻㄴㅇㅊㅌ</p>
               </div>
               <div className="flex h-auto w-full justify-between">
@@ -31,7 +31,7 @@ function App() {
           <div className="mb-2 flex h-32 w-full min-w-[700px] max-w-[1000px] rounded-lg bg-menubar-highlight p-3">
             {/* 동영상 정보  */}
             <div className="flex size-full flex-1 flex-col px-1.5">
-              <div className="flex h-full overflow-hidden  pb-4">
+              <div className="flex h-full overflow-hidden pb-4">
                 <p className="line-clamp-2 text-2xl text-white">제목 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅁㄴㅁㄴㄻㅇㅁㄹㅊㅍㅌ퓬ㅇㅎㄹㅇㄻㄴㅇㅊㅌ</p>
               </div>
               <div className="flex h-auto w-full justify-between">
