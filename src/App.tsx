@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Main from './pages/main';
 import Shorts from './pages/shorts';
 import Login from './pages/login';
@@ -10,6 +10,7 @@ import Layout from './pages/layout';
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/main" />} />
       <Route path="/" element={<Layout />}>
         <Route path="main" element={<Main />} />
         <Route path="shorts" element={<Shorts />} />
