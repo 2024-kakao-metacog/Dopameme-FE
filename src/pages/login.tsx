@@ -7,7 +7,9 @@ function App() {
     <div className="flex h-screen w-screen flex-col items-center bg-dopameme-bg ">
       <div className="flex h-full w-auto">
         <div className="flex min-h-80 min-w-[360px] flex-col items-center justify-center">
-          <Logo />
+          <Link to="/main">
+            <Logo />
+          </Link>
           <div className="flex w-[346px] flex-col pt-8">
             <input className="mb-7 w-full border-b-2 border-white bg-dopameme-bg px-2 py-1 text-white focus:outline-none" type="text" id="userId" placeholder="아이디" autoFocus></input>
             <input className="mb-7 w-full border-b-2 border-white bg-dopameme-bg px-2 py-1 text-white focus:outline-none" type="password" id="password" placeholder="비밀번호"></input>
