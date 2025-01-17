@@ -25,7 +25,7 @@ function VideoCard({ video }: VideoCardProps) {
         </div>
 
         {/* 제목 */}
-        <div className="flex h-auto w-full pl-2.5 pr-10 text-sm text-white md:text-lg lg:text-xl">
+        <div className="flex h-auto w-full pl-2.5 pr-10 text-lg text-white ">
           <span className="overflow-hidden truncate">{video?.title || 'Empty Slot'}</span>
         </div>
       </div>
