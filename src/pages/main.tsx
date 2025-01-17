@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../Redux/store';
-import { useGetVideosQuery } from '../Redux/videoApi'; // RTK Query 훅
-import { addVideos } from '../Redux/videoSlice'; // Redux 액션
+import { RootState } from '../Redux/store/store';
+import { useGetVideosQuery } from '../Redux/slice/videoApi'; // RTK Query 훅
+import { addVideos } from '../Redux/slice/videoSlice'; // Redux 액션
 import VideoCard from '../components/VideoCard'; // VideoCard 컴포넌트
 
 function App() {
