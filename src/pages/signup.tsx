@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="flex h-screen w-screen flex-col items-center bg-dopameme-bg ">
+    <div className="flex h-screen w-screen flex-col items-center bg-dopameme-bg">
       <div className="flex h-full w-auto">
         <div className="flex min-h-80 flex-col items-center justify-center">
           <Link to="/main">

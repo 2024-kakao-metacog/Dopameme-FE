@@ -36,11 +36,11 @@ function App() {
   };
 
   return (
-    <div className="bg-dopameme-bg flex size-full items-center justify-center">
+    <div className="flex size-full items-center justify-center bg-dopameme-bg">
       {/* 영상존 div */}
-      <div className="relative flex min-h-[510px] min-w-[294px]  justify-center p-4" style={{ width: dimensions.width, height: dimensions.height }}>
+      <div className="relative flex min-h-[510px] min-w-[294px] justify-center p-4" style={{ width: dimensions.width, height: dimensions.height }}>
         {/* 동영상 div */}
-        <div className="relative flex aspect-[9/16] overflow-hidden  rounded-lg">
+        <div className="relative flex aspect-[9/16] overflow-hidden rounded-lg">
           {videoData.src ? <Player src={videoData.src} autoplay={false} /> : <div className="flex size-full items-center justify-center bg-gray-500 text-white">No Video Available</div>}
           {/* 메타데이터 정보 표시 */}
           <div className="absolute bottom-2 z-10 w-full max-w-full space-y-2 rounded px-5 py-4 text-white">

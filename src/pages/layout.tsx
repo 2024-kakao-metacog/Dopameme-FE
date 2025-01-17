@@ -9,7 +9,9 @@ function App() {
       {/* menu bar */}
       <div className="flex h-full w-[200px] flex-col border-r-2 border-white px-4 py-3">
         <div className="overflow-auto scrollbar-hide">
-          <Logo className="min-h-[60px]" />
+          <Link to="/main">
+            <Logo className="min-h-[60px]" />
+          </Link>
           {/* tabs */}
           <div className="mt-4">
             <Link to="/main">
@@ -64,7 +66,7 @@ function App() {
         </div>
       </div>
       {/* contents area */}
-      <div className="size-full flex-1">
+      <div className="flex-1">
         <Outlet />
       </div>
     </div>
