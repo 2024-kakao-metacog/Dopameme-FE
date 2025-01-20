@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { ReactComponent as Logo } from '../assets/logo_login.svg';
 import { Link } from 'react-router-dom';
 import { useLoginMutation } from '../Redux/slice/authApi';
-import { setToken } from '../Redux/slice/authSlice';
+import { setAuth } from '../Redux/slice/authSlice';
 import { useDispatch } from 'react-redux';
 
 function App() {
-  const [username, setUsername] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [login, { isLoading, isError, error }] = useLoginMutation();
   const dispatch = useDispatch();
@@ -14,13 +14,13 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await login({ username, password }).unwrap();
+      const response = await login({ id, password }).unwrap();
       console.log('Login successful:', response);
       // Store the token or redirect to another page
 
       // 로그인 성공 시 Redux 상태에 토큰 저장
       if (response.token) {
-        dispatch(setToken(response.token)); // Redux 상태에 토큰 저장
+        dispatch(setAuth({ token: response.token, nickname: response.nickname })); // Redux 상태에 토큰 저장
         console.log('Token stored in Redux:', response.token);
       }
     } catch (err) {
@@ -39,8 +39,8 @@ function App() {
             <form onSubmit={handleSubmit}>
               <input
                 className="mb-7 w-full border-b-2 border-white bg-dopameme-bg px-2 py-1 text-white focus:outline-none"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
+                value={id}
+                onChange={e => setId(e.target.value)}
                 type="text"
                 id="userId"
                 placeholder="아이디"
