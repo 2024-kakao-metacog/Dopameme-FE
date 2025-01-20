@@ -2,8 +2,12 @@ import React from 'react';
 import { ReactComponent as Logo } from '../assets/logo_main.svg';
 import { Outlet } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { RootState } from '../Redux/store/store';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const { token, nickname } = useSelector((state: RootState) => state.auth);
+
   return (
     <div className="flex h-screen w-screen items-center overflow-hidden bg-dopameme-bg">
       {/* menu bar */}
@@ -17,9 +21,16 @@ function App() {
             <Link to="/main">
               <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">업로드</div>
             </Link>
-            <Link to="/login">
-              <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">로그인</div>
-            </Link>
+            {token ? (
+              <Link to="/notice">
+                <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">{nickname}</div>
+              </Link>
+            ) : (
+              <Link to="/login">
+                <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">로그인</div>
+              </Link>
+            )}
+
             <Link to="/notice">
               <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">알림</div>
             </Link>
