@@ -26,33 +26,39 @@ function Player({ src, autoplay = false }: PlayerProps) {
   const hideControlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
+    // videoRef.current를 로컬 변수에 저장
+    const videoElement = videoRef.current;
+
+    if (videoElement) {
+      // Dash.js 플레이어 초기화
       const player = dashjs.MediaPlayer().create();
-      player.initialize(videoRef.current, src, autoplay);
+      player.initialize(videoElement, src, autoplay);
 
-      videoRef.current.muted = false;
-      videoRef.current.volume = 1;
+      // 비디오 설정
+      videoElement.muted = false;
+      videoElement.volume = 1;
 
+      // 메타데이터 로드 시 핸들러
       const handleLoadedMetadata = () => {
-        if (videoRef.current) {
-          setDuration(videoRef.current.duration);
-        }
+        setDuration(videoElement.duration);
       };
 
-      videoRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
+      videoElement.addEventListener('loadedmetadata', handleLoadedMetadata);
 
+      // Autoplay 설정
       if (autoplay) {
         setTimeout(() => {
-          videoRef.current
-            ?.play()
+          videoElement
+            .play()
             .then(() => setIsPlaying(true))
             .catch(error => console.error('Autoplay failed:', error));
         }, 100);
       }
 
+      // 클린업 함수
       return () => {
         player.destroy();
-        videoRef.current?.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        videoElement.removeEventListener('loadedmetadata', handleLoadedMetadata);
       };
     }
   }, [src, autoplay]);
