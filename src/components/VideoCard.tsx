@@ -1,32 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import VideoBotton from '../components/VideoBotton';
-
-interface VideoCard {
-  videoId: string;
-  videoUrl: string;
-  thumbnailUrl: string;
-  title: string;
-}
+import { Video } from '../types/Video';
+import VideoBotton from './VideoBotton';
+import API_URL from '../config/env';
 
 interface VideoCardProps {
-  video: VideoCard | null; // 비디오가 없을 수도 있으므로 null 허용
+  video: Video;
 }
 
 function VideoCard({ video }: VideoCardProps) {
+  const shortVideoUrl = video.videoUrl;
+  console.log('VideoCard received video:', video); // 전달된 상태 출력ㅁ
   return (
     <div className="flex h-full w-1/4 items-center justify-center px-2">
       <div className="flex h-auto w-full flex-col space-y-2">
-        {/* 비디오 버튼 */}
         <div className="flex aspect-[9/16] h-auto w-full overflow-hidden rounded-xl">
-          <Link to={`/shorts?videoUrl=${encodeURIComponent(video?.videoUrl || '')}`}>
-            {video ? <VideoBotton videoUrl={video.videoUrl} thumbnailUrl={video.thumbnailUrl} /> : <span className="bg-gray-500 text-white">No Video</span>}
+          <Link to={`/shorts/${shortVideoUrl}`} state={{ video }}>
+            <VideoBotton videoUrl={API_URL + 'v1/videostream/video?manifest=' + video.videoUrl} thumbnailUrl={video.thumbnailUrl} />
           </Link>
         </div>
-
-        {/* 제목 */}
         <div className="flex h-auto w-full pl-2.5 pr-10 text-lg text-white">
-          <span className="overflow-hidden truncate">{video?.title || 'Empty Slot'}</span>
+          <span className="overflow-hidden truncate">{video.title}</span>
         </div>
       </div>
     </div>

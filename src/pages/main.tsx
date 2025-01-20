@@ -1,26 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../Redux/store/store';
-import { useGetVideosQuery } from '../Redux/slice/videoApi'; // RTK Query 훅
-import { addVideos } from '../Redux/slice/videoSlice'; // Redux 액션
-import VideoCard from '../components/VideoCard'; // VideoCard 컴포넌트
+import { fetchVideoMetadata } from '../api/videoApi'; // Axios 및 메타데이터 파싱 함수
+import VideoCard from '../components/VideoCard';
+import { Video } from '../types/Video';
 
-function App() {
-  const dispatch = useDispatch();
+function Main() {
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-  // RTK Query로 데이터 가져오기
-  const { data: videos, isLoading, isError } = useGetVideosQuery();
-
-  // Redux에 데이터 저장
   useEffect(() => {
-    if (videos) {
-      dispatch(addVideos(videos));
-    }
-  }, [videos, dispatch]);
-
-  // Redux Store에서 데이터 읽기
-  const storedVideos = useSelector((state: RootState) => state.videos.videos);
+    const loadVideos = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchVideoMetadata(4); // 4개의 메타데이터 요청
+        setVideos(data);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadVideos();
+  }, []);
 
   if (isLoading) return <p>Loading videos...</p>;
   if (isError) return <p>Error loading videos!</p>;
@@ -28,9 +31,8 @@ function App() {
   return (
     <div className="flex size-full items-center justify-center bg-dopameme-bg">
       <div className="flex size-full min-w-[1024px] flex-row p-4">
-        {/* VideoCard 컴포넌트를 동적으로 렌더링 */}
-        {storedVideos.slice(0, 4).map((video, index) => (
-          <VideoCard key={video?.videoId || `placeholder-${index}`} video={video} />
+        {videos.map((video, index) => (
+          <VideoCard key={video.videoId || `placeholder-${index}`} video={video} />
         ))}
         <Outlet />
       </div>
@@ -38,4 +40,4 @@ function App() {
   );
 }
 
-export default App;
+export default Main;
