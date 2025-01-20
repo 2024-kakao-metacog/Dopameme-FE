@@ -6,13 +6,13 @@ import { RootState } from '../Redux/store/store';
 import { useSelector } from 'react-redux';
 
 function App() {
-  const { token, nickname } = useSelector((state: RootState) => state.auth);
+  const { token, nickname, id } = useSelector((state: RootState) => state.auth);
   const subscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions); // 구독 목록 가져오기
 
   return (
     <div className="flex h-screen w-screen items-center overflow-hidden bg-dopameme-bg">
       {/* menu bar */}
-      <div className="flex h-full w-[200px] flex-col border-r-2 border-white px-4 py-3">
+      <div className="h-full w-[200px] min-w-[200px] flex-col border-r-2 border-white px-4 py-3">
         <div className="overflow-auto scrollbar-hide">
           <Link to="/main">
             <Logo className="min-h-[60px]" />
@@ -23,7 +23,7 @@ function App() {
               <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">업로드</div>
             </Link>
             {token ? (
-              <Link to="/notice">
+              <Link to={`/${id}`}>
                 <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">{nickname}</div>
               </Link>
             ) : (
@@ -58,7 +58,7 @@ function App() {
         </div>
       </div>
       {/* contents area */}
-      <div className="flex-1">
+      <div className="h-full flex-1">
         <Outlet />
       </div>
     </div>
