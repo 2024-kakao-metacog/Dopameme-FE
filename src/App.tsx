@@ -6,6 +6,7 @@ import Login from './pages/login';
 import Signup from './pages/signup';
 import Notice from './pages/notice';
 import Layout from './pages/layout';
+import Channel from './pages/channel';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="main" element={<Main />} />
         <Route path="shorts" element={<Shorts />} />
         <Route path="notice" element={<Notice />} />
+        <Route path=":id" element={<Channel />} />
       </Route>
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />

@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../assets/logo_login.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../Redux/slice/authApi';
 import { setAuth } from '../Redux/slice/authSlice';
 import { useDispatch } from 'react-redux';
+import { useGetSubscriptionsQuery } from '../Redux/slice/subApi';
+import { setSubscriptions } from '../Redux/slice/subSlice';
 
 function App() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [login, { isLoading, isError, error }] = useLoginMutation();
   const dispatch = useDispatch();
+  const [userId, setUserId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,13 +24,26 @@ function App() {
 
       // 로그인 성공 시 Redux 상태에 토큰 저장
       if (response.token) {
-        dispatch(setAuth({ token: response.token, nickname: response.nickname })); // Redux 상태에 토큰 저장
+        dispatch(setAuth({ token: response.token, nickname: response.nickname, id: response.id })); // Redux 상태에 토큰 저장
         console.log('Token stored in Redux:', response.token);
+        setUserId(response.id);
       }
     } catch (err) {
       console.error('Login failed:', err);
     }
   };
+
+  const { data: subscriptions } = useGetSubscriptionsQuery(userId as string, {
+    skip: !userId, // userId가 없으면 API 호출을 하지 않음
+  });
+
+  useEffect(() => {
+    if (subscriptions) {
+      dispatch(setSubscriptions(subscriptions));
+      console.log('Subscriptions stored in Redux:', subscriptions);
+      navigate(`/main`);
+    }
+  }, [subscriptions, dispatch, userId, navigate]);
 
   return (
     <div className="flex h-screen w-screen flex-col items-center bg-dopameme-bg">

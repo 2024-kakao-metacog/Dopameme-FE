@@ -9,6 +9,7 @@ interface LoginRequest {
 interface LoginResponse {
   token: string;
   nickname: string;
+  id: string;
 }
 
 export const authApi = createApi({
