@@ -4,7 +4,7 @@ function App() {
   return (
     <div className="flex size-full flex-col">
       {/* header */}
-      <div className="flex h-32 w-full items-center border-b-2 border-white">
+      <div className="flex h-32 min-h-32 w-full items-center border-b-2 border-white">
         <div className="h-auto w-full pl-14 text-2xl font-bold text-white">알림</div>
       </div>
       {/* contents */}
