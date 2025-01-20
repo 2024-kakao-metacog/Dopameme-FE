@@ -7,6 +7,7 @@ import Signup from './pages/signup';
 import Notice from './pages/notice';
 import Layout from './pages/layout';
 import Channel from './pages/channel';
+import ShortsManager from './pages/ShortsManager';
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
       <Route path="/" element={<Navigate to="/main" />} />
       <Route path="/" element={<Layout />}>
         <Route path="main" element={<Main />} />
-        <Route path="shorts" element={<Shorts />} />
+        <Route path="shorts" element={<ShortsManager />}>
+          <Route path=":videoUrl" element={<Shorts />} />
+        </Route>
         <Route path="notice" element={<Notice />} />
         <Route path=":id" element={<Channel />} />
       </Route>
