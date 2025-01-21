@@ -4,16 +4,16 @@ import { Video } from '../types/Video';
 
 interface VideoApiResponse {
   snippet: Video;
+  videoUrl: Video['videoUrl']; // Video의 videoUrl 속성만 재사용
 }
 
 // 메타데이터를 파싱하는 함수
 function parseVideoMetadata(data: VideoApiResponse[]): Video[] {
   return data.map(item => ({
-    videoId: item.snippet.videoId,
     title: item.snippet.title,
     videoUrl: item.snippet.videoUrl,
     thumbnailUrl: item.snippet.thumbnailUrl,
-    publishedAt: item.snippet.publishedAt,
+    publishedAt: new Date(item.snippet.publishedAt).toISOString(),
     userId: item.snippet.userId,
     userNickname: item.snippet.userNickname,
     isOwner: item.snippet.isOwner,
@@ -22,35 +22,37 @@ function parseVideoMetadata(data: VideoApiResponse[]): Video[] {
   }));
 }
 
+// 단일 메타데이터를 파싱하는 함수
+function parseSingleVideoMetadata(data: VideoApiResponse): Video {
+  return {
+    title: data.snippet.title,
+    videoUrl: data.snippet.videoUrl,
+    thumbnailUrl: data.snippet.thumbnailUrl,
+    publishedAt: new Date(data.snippet.publishedAt).toISOString(),
+    userId: data.snippet.userId,
+    userNickname: data.snippet.userNickname,
+    isOwner: data.snippet.isOwner,
+    isSubscribed: data.snippet.isSubscribed,
+    canSubscribe: data.snippet.canSubscribe,
+  };
+}
+
 // 동영상 메타데이터를 가져오는 함수
 async function fetchVideoMetadata(count: number): Promise<Video[]> {
   try {
-    const response = await axios.get<VideoApiResponse[]>(`${API_URL}v1/video/metadata/list?maxResults=${count}`);
-    return parseVideoMetadata(response.data); // 메타데이터 파싱 후 반환
+    const response = await axios.get(`${API_URL}v1/video/metadata/list/random?maxResults=${count}`);
+    return response.data.snippet; // snippet 배열만 반환
   } catch (error) {
-    console.error('Failed to fetch video metadata:', error);
-    return [];
+    console.error('Error in fetchVideoMetadata:', error);
+    throw error;
   }
 }
 
-// videoUrl로 특정 비디오 메타데이터를 가짜 데이터로 반환
+// URL로 메타데이터를 가져오는 함수
 async function fetchVideoMetadataByUrl(videoUrl: string): Promise<Video | null> {
-  // 실제 API에서 데이터를 가져오는 부분을 가정하겠습니다
   try {
-    // 가짜 메타데이터를 반환합니다.
-    const fakeVideo: Video = {
-      videoId: 'dummy-video-id',
-      title: 'Sample Video Title',
-      videoUrl: videoUrl,
-      thumbnailUrl: 'https://dummyimage.com/320x180/000/fff',
-      publishedAt: Date.now(),
-      userId: 'user123',
-      userNickname: 'Dummy User',
-      isOwner: false,
-      isSubscribed: false,
-      canSubscribe: true,
-    };
-    return fakeVideo;
+    const response = await axios.get<VideoApiResponse>(`${API_URL}v1/video/metadata?videoUrl=${encodeURIComponent(videoUrl)}`);
+    return parseSingleVideoMetadata(response.data); // 단일 메타데이터 파싱 후 반환
   } catch (error) {
     console.error('Error fetching video metadata by URL:', error);
     return null;
