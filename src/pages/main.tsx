@@ -31,7 +31,7 @@ function Main() {
 
   return (
     <div className="flex size-full items-center justify-center bg-dopameme-bg">
-      <div className="flex size-full min-w-[1024px] flex-row items-center justify-center p-4">
+      <div className="flex size-full min-w-[64rem] max-w-[112rem] flex-row items-center justify-center p-4">
         {videos.map(video => (
           <VideoCard key={video.videoUrl} video={video} />
         ))}
