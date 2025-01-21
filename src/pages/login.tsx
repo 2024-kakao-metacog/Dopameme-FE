@@ -62,6 +62,7 @@ function App() {
                 id="userId"
                 placeholder="아이디"
                 autoFocus
+                autoComplete="off"
               ></input>
               <input
                 className="mb-7 w-full border-b-2 border-white bg-dopameme-bg px-2 py-1 text-white focus:outline-none"
@@ -70,6 +71,7 @@ function App() {
                 type="password"
                 id="password"
                 placeholder="비밀번호"
+                autoComplete="off"
               ></input>
               <div className="flex w-full justify-center">
                 <Link to="/signup">
