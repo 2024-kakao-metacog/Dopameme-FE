@@ -7,6 +7,7 @@ import Signup from './pages/signup';
 import Notice from './pages/notice';
 import Layout from './pages/layout';
 import Channel from './pages/channel';
+import Upload from './pages/upload';
 import ShortsManager from './pages/ShortsManager';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path=":videoUrl" element={<Shorts />} />
         </Route>
         <Route path="notice" element={<Notice />} />
+        <Route path="upload" element={<Upload />} />
         <Route path=":id" element={<Channel />} />
       </Route>
       <Route path="login" element={<Login />} />

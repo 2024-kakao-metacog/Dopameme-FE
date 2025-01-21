@@ -19,7 +19,7 @@ function App() {
           </Link>
           {/* tabs */}
           <div className="mt-4">
-            <Link to="/main">
+            <Link to="/upload">
               <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">업로드</div>
             </Link>
             {token ? (
