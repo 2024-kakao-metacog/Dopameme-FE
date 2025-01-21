@@ -31,17 +31,31 @@ function DashVideoPlayer({ videoUrl, thumbnailUrl }: VideoPlayerProps) {
   // 마우스 오버 시 비디오를 처음부터 재생
   const handleMouseOver = () => {
     setIsHovered(true);
+
     if (videoRef.current) {
-      videoRef.current.currentTime = 0; // 비디오 재생 위치를 처음으로 설정
-      videoRef.current.play().catch(error => console.error('Error during play:', error)); // 재생 중 오류 처리
+      // 지연 시간을 추가하여 재생 요청을 제어
+      setTimeout(() => {
+        if (videoRef.current && videoRef.current.paused) {
+          videoRef.current.currentTime = 0; // 비디오를 처음부터 재생
+          videoRef.current.play().catch(error => {
+            if (error.name !== 'AbortError') {
+              console.error('Error during play:', error);
+            }
+          });
+        }
+      }, 50); // 50ms 지연
     }
   };
-
   // 마우스가 떠날 때 비디오를 일시 정지
   const handleMouseLeave = () => {
     setIsHovered(false);
+
     if (videoRef.current) {
-      videoRef.current.pause();
+      setTimeout(() => {
+        if (videoRef.current && !videoRef.current.paused) {
+          videoRef.current.pause();
+        }
+      }, 50); // 50ms 지연
     }
   };
 
