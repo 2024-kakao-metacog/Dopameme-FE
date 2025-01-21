@@ -17,7 +17,7 @@ function Shorts() {
   }
 
   const videoData = {
-    src: API_URL + 'v1/videostream/video?manifest=' + currentVideo.videoUrl,
+    src: API_URL + 'v1/videostream/' + currentVideo.videoUrl + '/manifest.mpd',
     title: currentVideo.title,
     channelName: currentVideo.userNickname,
   };
