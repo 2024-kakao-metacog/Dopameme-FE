@@ -12,6 +12,16 @@ interface LoginResponse {
   id: string;
 }
 
+interface SignupRequest {
+  id: string;
+  password: string;
+  nickname: string;
+}
+
+interface SignupResponse {
+  message: string;
+}
+
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
@@ -23,7 +33,14 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+    register: builder.mutation<SignupResponse, SignupRequest>({
+      query: userData => ({
+        url: '/signup',
+        method: 'PUT',
+        body: userData,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation } = authApi;
