@@ -13,7 +13,8 @@ function Main() {
     const loadVideos = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchVideoMetadata(4); // 4개의 메타데이터 요청
+        const data = await fetchVideoMetadata(5); // 4개의 메타데이터 요청
+        console.log('Fetched video metadata:', data); // 메타데이터 출력
         setVideos(data);
       } catch (error) {
         console.error('Error fetching videos:', error);
@@ -30,9 +31,9 @@ function Main() {
 
   return (
     <div className="flex size-full items-center justify-center bg-dopameme-bg">
-      <div className="flex size-full min-w-[1024px] flex-row p-4">
-        {videos.map((video, index) => (
-          <VideoCard key={video.videoId || `placeholder-${index}`} video={video} />
+      <div className="flex size-full min-w-[1024px] flex-row items-center justify-center p-4">
+        {videos.map(video => (
+          <VideoCard key={video.videoUrl} video={video} />
         ))}
         <Outlet />
       </div>
