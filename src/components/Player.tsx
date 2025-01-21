@@ -238,7 +238,7 @@ function Player({ src, autoplay = false }: PlayerProps) {
 
       {/* Video Progress Bar - 하단 */}
       <div
-        className={`absolute inset-x-0 bottom-0 p-1 text-white transition-opacity duration-1000 ${
+        className={`absolute inset-x-0 bottom-0 z-10 p-1 text-white transition-opacity duration-1000 ${
           mousePosition === 'bottom' && showControls ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
@@ -259,6 +259,7 @@ function Player({ src, autoplay = false }: PlayerProps) {
           />
         </div>
       </div>
+      <div className="absolute inset-x-0 bottom-0 h-[15%] bg-gradient-to-t from-black/70 to-black/0"></div>
     </div>
   );
 }
