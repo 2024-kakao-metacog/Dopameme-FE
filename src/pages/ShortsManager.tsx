@@ -11,6 +11,7 @@ function ShortsManager() {
   const [videoList, setVideoList] = useState<Video[]>([]);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [curIndex, setCurIndex] = useState<number>(0); // 현재 인덱스 관리
+  const [isScrolling, setIsScrolling] = useState<boolean>(false); // 스크롤 딜레이 상태
 
   // 현재 인덱스에 해당하는 비디오
   const curVideo = videoList[curIndex] || null;
@@ -147,6 +148,37 @@ function ShortsManager() {
     }
   }, [videoList]); // videoList가 변경될 때마다 실행
 
+  // 스크롤 이벤트 추가
+  useEffect(() => {
+    const handleWheel = (event: WheelEvent) => {
+      // 스크롤 딜레이 중이라면 무시
+      if (isScrolling) return;
+      console.log('스크롤 입력:', event.deltaY);
+      if (event.deltaY > 0) {
+        // 아래로 스크롤 -> 다음 비디오
+        console.log('아래로 스크롤 감지');
+        handleNext();
+      } else if (event.deltaY < 0) {
+        // 위로 스크롤 -> 이전 비디오
+        console.log('위로 스크롤 감지');
+        handlePrev();
+      }
+
+      // 딜레이 시작
+      setIsScrolling(true);
+      setTimeout(() => {
+        setIsScrolling(false); // 딜레이 종료
+      }, 500); // 500ms 딜레이
+    };
+
+    window.addEventListener('wheel', handleWheel);
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, [isScrolling, handleNext, handlePrev]);
+
+  // 키보드 이벤트 추가
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowUp') {
