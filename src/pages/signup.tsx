@@ -29,18 +29,32 @@ function App() {
     );
   };
 
+  const validateInput = (): string | null => {
+    const idRegex = /^[a-zA-Z0-9]{2,16}$/; // 영어와 숫자, 2~16자
+    const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{4,16}$/; // 영어, 숫자, 특수문자, 4~16자
+    const nicknameRegex = /^[가-힣a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{2,16}$/; // 한글, 영어, 숫자, 특수문자, 2~16자
+
+    if (!idRegex.test(userId)) {
+      return '아이디는 영어와 숫자만 가능하며 2~16자로 입력해 주세요.';
+    }
+    if (!passwordRegex.test(password)) {
+      return '비밀번호는 영어, 숫자, 특수문자만 가능하며 4~16자로 입력해 주세요.';
+    }
+    if (!nicknameRegex.test(nickname)) {
+      return '닉네임은 한글, 영어, 숫자, 특수문자만 가능하며 2~16자로 입력해 주세요.';
+    }
+    return null; // 유효한 경우
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userId) {
-      setError('아이디를 입력해 주세요');
-      return;
-    } else if (!password) {
-      setError('비밀번호를 입력해 주세요');
-      return;
-    } else if (!nickname) {
-      setError('닉네임을 입력해 주세요');
+    const validationError = validateInput();
+
+    if (validationError) {
+      setError(validationError);
       return;
     }
+
     try {
       setError('');
       const response = await register({ userId, password, nickname }).unwrap();
