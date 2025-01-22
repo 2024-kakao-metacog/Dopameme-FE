@@ -40,7 +40,7 @@ function parseSingleVideoMetadata(data: VideoApiResponse): Video {
 // 동영상 메타데이터를 가져오는 함수
 async function fetchVideoMetadata(count: number): Promise<Video[]> {
   try {
-    const response = await axios.get(`${API_URL}v1/video/metadata/list/random?maxResults=${count}`);
+    const response = await axios.get(`${API_URL}v1/video/metadatas/random?maxResults=${count}`);
     return response.data.snippet; // snippet 배열만 반환
   } catch (error) {
     console.error('Error in fetchVideoMetadata:', error);
