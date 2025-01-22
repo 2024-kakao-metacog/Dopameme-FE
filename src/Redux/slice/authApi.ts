@@ -13,7 +13,7 @@ interface LoginResponse {
 }
 
 interface SignupRequest {
-  id: string;
+  userId: string;
   password: string;
   nickname: string;
 }
@@ -35,7 +35,7 @@ export const authApi = createApi({
     }),
     register: builder.mutation<SignupResponse, SignupRequest>({
       query: userData => ({
-        url: '/signup',
+        url: 'v1/user',
         method: 'PUT',
         body: userData,
       }),
