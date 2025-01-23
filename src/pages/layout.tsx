@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ReactComponent as Logo } from '../assets/logo_main.svg';
 import { Outlet } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { RootState } from '../Redux/store/store';
 import { useSelector } from 'react-redux';
+import { getInfoByToken } from '../utils/setUserInfo';
+import { useAppDispatch } from '../Redux/rtkHooks';
 
 function App() {
-  const { token, nickname, id } = useSelector((state: RootState) => state.auth);
+  const { accessToken, nickname, id } = useSelector((state: RootState) => state.auth);
   const subscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions); // 구독 목록 가져오기
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // accessToken이 null일 때만 getInfoByToken 실행
+    if (!accessToken) {
+      dispatch(getInfoByToken());
+    }
+  }, [dispatch, accessToken]);
 
   return (
     <div className="flex h-screen w-screen items-center overflow-hidden bg-dopameme-bg">
@@ -22,7 +32,7 @@ function App() {
             <Link to="/upload">
               <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">업로드</div>
             </Link>
-            {token ? (
+            {accessToken ? (
               <Link to={`/${id}`}>
                 <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow hover:bg-menubar-highlight">{nickname}</div>
               </Link>
