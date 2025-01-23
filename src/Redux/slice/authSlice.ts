@@ -29,6 +29,10 @@ const authSlice = createSlice({
       state.accessToken = null;
       state.nickname = null;
       state.id = null;
+
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('nickname');
+      localStorage.removeItem('id');
     },
   },
 });
