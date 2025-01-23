@@ -12,6 +12,8 @@ function ShortsManager() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [curIndex, setCurIndex] = useState<number>(0); // 현재 인덱스 관리
   const [isScrolling, setIsScrolling] = useState<boolean>(false); // 스크롤 딜레이 상태
+  const [translateY, setTranslateY] = useState<number>(0); // 애니메이션 Y축 이동값
+  const [isAnimating, setIsAnimating] = useState<boolean>(false); // 애니메이션 상태
 
   // 현재 인덱스에 해당하는 비디오
   const curVideo = videoList[curIndex] || null;
@@ -47,7 +49,7 @@ function ShortsManager() {
   useEffect(() => {
     const loadVideoMetadata = async () => {
       try {
-        const metadata = await fetchVideoMetadata(10);
+        const metadata = await fetchVideoMetadata(12);
 
         // 새로 고침일 때만 실행
         if (navigationType === 'POP' && videoUrl) {
@@ -83,37 +85,40 @@ function ShortsManager() {
     }
   }, [videoUrl]); // videoList를 추가하면 curIndex가 0이 되어버리는 버그 발생
 
-  // videoList 상태 변경 확인
-  useEffect(() => {
-    console.log('Updated videoList in ShortsManager:', videoList);
-  }, [videoList]);
-
-  // curIndex 변경 확인
-  useEffect(() => {
-    console.log('Current index:', curIndex);
-    console.log('Current video:', curVideo);
-  }, [curIndex, curVideo]);
-
-  // 이전 동영상으로 이동
+  // 이전 비디오로 이동
   const handlePrev = useCallback(() => {
-    if (curIndex > 0) {
-      setCurIndex(prev => prev - 1);
-    }
-  }, [curIndex]); // curIndex가 변경될 때만 함수가 새로 정의됨
+    if (!isAnimating && curIndex > 0) {
+      setIsAnimating(true);
+      setTranslateY(100); // 위로 이동 애니메이션 시작
 
-  // 다음 동영상으로 이동
-  const handleNext = useCallback(() => {
-    if (curIndex < videoList.length - 1) {
-      setCurIndex(prev => prev + 1);
+      setTimeout(() => {
+        setCurIndex(prev => prev - 1); // 콘텐츠 교체
+        setTranslateY(0); // 위치 초기화
+        setIsAnimating(false);
+      }, 500); // 애니메이션 지속 시간
     }
-  }, [curIndex, videoList.length]);
+  }, [isAnimating, curIndex]);
+
+  // 다음 비디오로 이동
+  const handleNext = useCallback(() => {
+    if (!isAnimating && curIndex < videoList.length - 1) {
+      setIsAnimating(true);
+      setTranslateY(-100); // 아래로 이동 애니메이션 시작
+
+      setTimeout(() => {
+        setCurIndex(prev => prev + 1); // 콘텐츠 교체
+        setTranslateY(0); // 위치 초기화
+        setIsAnimating(false);
+      }, 500); // 애니메이션 지속 시간
+    }
+  }, [isAnimating, curIndex, videoList.length]);
 
   // videoList 길이가 curIndex + 2과 같으면 메타데이터 추가
   useEffect(() => {
     if (videoList.length - 2 === curIndex) {
       const loadAdditionalMetadata = async () => {
         try {
-          const additionalMetadata = await fetchVideoMetadata(10);
+          const additionalMetadata = await fetchVideoMetadata(12);
           setVideoList(prevList => [...prevList, ...additionalMetadata]); // 추가 데이터를 기존 목록 뒤에 추가
         } catch (error) {
           console.error('Error fetching additional video metadata:', error);
@@ -124,43 +129,17 @@ function ShortsManager() {
     }
   }, [curIndex, videoList]); // curIndex만 의존
 
-  useEffect(() => {
-    if (videoList.length >= 100) {
-      const updateVideoList = async () => {
-        try {
-          // 1. videoList의 첫 10개를 삭제
-          setVideoList(prevList => prevList.slice(10)); // splice 대신 immutable 방식으로 삭제
-
-          // 2. 새로운 10개의 메타데이터를 API 호출로 가져오기
-          const newMetadata = await fetchVideoMetadata(10);
-
-          // 3. videoList에 새로운 메타데이터 추가
-          setVideoList(prevList => [...prevList, ...newMetadata]);
-
-          // 4. curIndex를 조정
-          setCurIndex(prevIndex => Math.max(prevIndex - 10, 0));
-        } catch (error) {
-          console.error('Error updating videoList:', error);
-        }
-      };
-
-      updateVideoList();
-    }
-  }, [videoList]); // videoList가 변경될 때마다 실행
-
   // 스크롤 이벤트 추가
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
       // 스크롤 딜레이 중이라면 무시
       if (isScrolling) return;
-      console.log('스크롤 입력:', event.deltaY);
+
       if (event.deltaY > 0) {
         // 아래로 스크롤 -> 다음 비디오
-        console.log('아래로 스크롤 감지');
         handleNext();
       } else if (event.deltaY < 0) {
         // 위로 스크롤 -> 이전 비디오
-        console.log('위로 스크롤 감지');
         handlePrev();
       }
 
@@ -198,21 +177,29 @@ function ShortsManager() {
   return (
     <div className="flex size-full items-center justify-center bg-dopameme-bg">
       {/* 영상존 div */}
-      <div className="relative flex min-h-[510px] min-w-[294px] justify-center p-4" style={{ width: dimensions.width, height: dimensions.height }}>
-        {/* 하위 컴포넌트로 상태 전달 */}
-        <Outlet context={{ currentVideo: curVideo }} />
+      <div className="relative flex min-h-[510px] min-w-[294px] justify-center" style={{ width: dimensions.width, height: dimensions.height }}>
+        {/* 이동 애니메이션 */}
+        <div
+          className="absolute flex size-full items-center justify-center px-4 py-6 transition-transform duration-300"
+          style={{
+            transform: `translateY(${translateY / 10}%)`, // Y축 이동
+          }}
+        >
+          {/* 하위 컴포넌트로 상태 전달 */}
+          <Outlet context={{ currentVideo: curVideo }} />
+        </div>
       </div>
       {/* 탐색 버튼 */}
       <div className="flex flex-col items-center justify-center space-y-8 pl-4">
         {/* 이전 버튼 */}
         {curIndex > 0 && ( // curIndex가 0보다 클 때만 렌더링
-          <button className="hover:opacity-60" onClick={handlePrev}>
+          <button className="transition-all duration-500 hover:opacity-60" onClick={handlePrev}>
             <PrevButton className="size-[60px]" />
           </button>
         )}
 
         {/* 다음 버튼 */}
-        <button className="hover:opacity-60" onClick={handleNext}>
+        <button className="transition-all duration-500 hover:opacity-60" onClick={handleNext}>
           <NextButton className="size-[60px]" />
         </button>
       </div>
