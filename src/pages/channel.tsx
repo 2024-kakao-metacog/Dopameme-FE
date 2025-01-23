@@ -11,6 +11,7 @@ function App() {
 
   const handleLogout = () => {
     dispatch(clearAuth());
+    alert('로그아웃되었습니다.');
   };
 
   return (
