@@ -7,12 +7,14 @@ import { useSelector } from 'react-redux';
 import { getInfoByToken } from '../utils/setUserInfo';
 import { useAppDispatch } from '../Redux/rtkHooks';
 import { useGetSubscriptionsQuery } from '../Redux/slice/subApi';
+import { setSubscriptions } from '../Redux/slice/subSlice';
+import { Subscription } from '../types/Subscribe';
 
 function App() {
   const { accessToken, nickname, id } = useSelector((state: RootState) => state.auth);
   const subscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions); // 구독 목록 가져오기
   const dispatch = useAppDispatch();
-  const { data } = useGetSubscriptionsQuery();
+  const { data } = useGetSubscriptionsQuery(undefined, { skip: !accessToken });
 
   console.log('구독리스트', data?.snippet);
   useEffect(() => {
@@ -22,6 +24,18 @@ function App() {
       dispatch(getInfoByToken());
     }
   }, [dispatch, accessToken, id, nickname]);
+
+  useEffect(() => {
+    if (data?.snippet) {
+      const formattedSubscriptions = data.snippet.map((item: Subscription) => ({
+        id: item.id,
+        followedUserId: item.followedUserId,
+        followedNickname: item.followedNickname,
+        createdAt: item.createdAt,
+      }));
+      dispatch(setSubscriptions(formattedSubscriptions));
+    }
+  }, [data, dispatch]);
 
   return (
     <div className="flex h-screen w-screen items-center overflow-hidden bg-dopameme-bg">
@@ -54,9 +68,6 @@ function App() {
           {/* sub list */}
           <div>
             <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow">구독</div>
-            <Link key="test" to="testId">
-              <div className="mb-1 rounded-md p-1 text-base font-normal text-white hover:bg-menubar-highlight">test nickname {/* 채널 이름으로 닉네임 사용 */}</div>
-            </Link>
             {subscriptions && subscriptions.length > 0 ? (
               subscriptions.map(subscription => (
                 <Link key={subscription.followedUserId} to={`/${subscription.followedUserId}`}>

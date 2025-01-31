@@ -1,13 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface Subscription {
-  id: number;
-  followedUserId: string;
-  followedNickname: string;
-}
-interface SubscriptionState {
-  subscriptions: Subscription[];
-}
+import { Subscription, SubscriptionState } from '../../types/Subscribe';
 
 const initialState: SubscriptionState = {
   subscriptions: [],
@@ -20,8 +12,11 @@ const subscriptionSlice = createSlice({
     setSubscriptions: (state, action: PayloadAction<Subscription[]>) => {
       state.subscriptions = action.payload;
     },
+    clearSubscriptions: state => {
+      state.subscriptions = [];
+    },
   },
 });
 
-export const { setSubscriptions } = subscriptionSlice.actions;
+export const { setSubscriptions, clearSubscriptions } = subscriptionSlice.actions;
 export default subscriptionSlice.reducer;

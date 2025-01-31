@@ -6,6 +6,7 @@ import { clearAuth } from '../Redux/slice/authSlice';
 import { fetchVideoMetadataById } from '../api/videoApi';
 import { Video } from '../types/Video';
 import VideoCard from '../components/VideoCard';
+import { clearSubscriptions } from '../Redux/slice/subSlice';
 
 function App() {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ function App() {
 
   const handleLogout = () => {
     dispatch(clearAuth());
+    dispatch(clearSubscriptions());
     alert('로그아웃되었습니다.');
   };
 
