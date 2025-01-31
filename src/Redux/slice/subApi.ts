@@ -20,7 +20,7 @@ interface UnfollowResponse {
 }
 
 interface FollowsResponse {
-  snippet: [{ id: number; followedUserId: string; followedNickname: string }];
+  snippet: [{ id: number; followedUserId: string; followedNickname: string; createdAt: string }];
 }
 
 export const subscriptionApi = createApi({
