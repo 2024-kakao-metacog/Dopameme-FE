@@ -12,7 +12,6 @@ function VideoCard({ video }: VideoCardProps) {
   const shortVideoUrl = video.videoUrl;
   const VIDEO_RUL = `${API_URL}v1/videostream/${video.videoUrl}/manifest.mpd`;
 
-  console.log('VideoCard received video:', video); // 전달된 상태 출력ㅁ
   return (
     <div className="flex h-full w-1/4 items-center justify-center px-2">
       <div className="flex h-auto w-full flex-col space-y-2">

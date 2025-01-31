@@ -7,7 +7,6 @@ function App() {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [login, { isLoading, isError }] = useLoginMutation();
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,19 +22,6 @@ function App() {
       console.error('Login failed:', err);
     }
   };
-
-  // 구독 목록 불러오는 부분
-  // const { data: subscriptions } = useGetSubscriptionsQuery(userId as string, {
-  //   skip: !userId, // userId가 없으면 API 호출을 하지 않음
-  // });
-
-  // useEffect(() => {
-  //   if (subscriptions) {
-  //     dispatch(setSubscriptions(subscriptions));
-  //     console.log('Subscriptions stored in Redux:', subscriptions);
-  //     navigate(`/main`);
-  //   }
-  // }, [subscriptions, dispatch, userId, navigate]);
 
   return (
     <div className="flex h-screen w-screen flex-col items-center bg-dopameme-bg">

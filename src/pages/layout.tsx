@@ -6,18 +6,22 @@ import { RootState } from '../Redux/store/store';
 import { useSelector } from 'react-redux';
 import { getInfoByToken } from '../utils/setUserInfo';
 import { useAppDispatch } from '../Redux/rtkHooks';
+import { useGetSubscriptionsQuery } from '../Redux/slice/subApi';
 
 function App() {
   const { accessToken, nickname, id } = useSelector((state: RootState) => state.auth);
   const subscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions); // 구독 목록 가져오기
   const dispatch = useAppDispatch();
+  const { data } = useGetSubscriptionsQuery();
 
+  console.log('구독리스트', data?.snippet);
   useEffect(() => {
     // accessToken이 null일 때만 getInfoByToken 실행
-    if (!accessToken) {
+    if (!accessToken || !id || !nickname) {
+      console.log('데이터 패치');
       dispatch(getInfoByToken());
     }
-  }, [dispatch, accessToken]);
+  }, [dispatch, accessToken, id, nickname]);
 
   return (
     <div className="flex h-screen w-screen items-center overflow-hidden bg-dopameme-bg">
@@ -55,9 +59,9 @@ function App() {
             </Link>
             {subscriptions && subscriptions.length > 0 ? (
               subscriptions.map(subscription => (
-                <Link key={subscription.id} to={`/${subscription.id}`}>
+                <Link key={subscription.followedUserId} to={`/${subscription.followedUserId}`}>
                   <div className="mb-1 rounded-md p-1 text-base font-normal text-white hover:bg-menubar-highlight">
-                    {subscription.nickname} {/* 채널 이름으로 닉네임 사용 */}
+                    {subscription.followedNickname} {/* 채널 이름으로 닉네임 사용 */}
                   </div>
                 </Link>
               ))
