@@ -9,7 +9,7 @@ import VideoCard from '../components/VideoCard';
 import { clearSubscriptions } from '../Redux/slice/subSlice';
 
 function App() {
-  const { id } = useParams<{ id: string }>();
+  const { id: userId } = useParams<{ id: string }>();
   const { id: myId } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
@@ -19,7 +19,6 @@ function App() {
   const [curIndex, setCurrentIndex] = useState(0); // 현재 첫 번째 비디오 인덱스
 
   const MAX_ITEMS = 4; // 한 번에 보이는 비디오 수
-  const userId = 'crawl0005'; // crawl0486
 
   const handleLogout = () => {
     dispatch(clearAuth());
@@ -29,6 +28,11 @@ function App() {
 
   // 비디오 메타데이터 로드
   useEffect(() => {
+    if (!userId) {
+      setIsError(true); // userId가 없는 경우 에러 처리
+      return;
+    }
+
     const loadVideos = async () => {
       try {
         setIsLoading(true);
@@ -70,8 +74,8 @@ function App() {
     <div className="flex size-full flex-col">
       {/* header */}
       <div className="flex h-32 min-h-32 w-full items-center border-b-2 border-white">
-        <div className="flex h-full items-center pl-14 pr-3 text-4xl font-bold text-white">{id}</div>
-        {id === myId && (
+        <div className="flex h-full items-center pl-14 pr-3 text-4xl font-bold text-white">{userId}</div>
+        {userId === myId && (
           <div className="flex h-full items-center">
             <button className="border-b-2 border-dopameme-bg text-white hover:border-white" onClick={handleLogout}>
               로그아웃
@@ -80,21 +84,20 @@ function App() {
         )}
       </div>
       {/* contents */}
-      <div className="flex size-full flex-row items-center justify-center scrollbar-hide">
+      <div className="flex size-full flex-col items-center justify-center scrollbar-hide">
         <div
-          className="flex size-full min-w-[64rem] max-w-[92rem] flex-row justify-center overflow-hidden transition-all duration-500" // 가로 스크롤 숨김
+          className="flex h-auto w-full min-w-[64rem] max-w-[92rem] flex-row justify-center overflow-hidden transition-all duration-500" // 가로 스크롤 숨김
           onWheel={handleWheel} // 휠 이벤트
         >
           {videos.slice(curIndex, curIndex + MAX_ITEMS).map(video => (
             <VideoCard key={video.videoUrl} video={video} />
           ))}
-
-          {/* 점(Indicator) 표시 */}
-          <div className="absolute bottom-[15%] mt-2 flex space-x-2">
-            {Array.from({ length: Math.ceil(videos.length / MAX_ITEMS - 1) }).map((_, index) => (
-              <div key={index} className={`size-2 rounded-full ${index === Math.floor(curIndex / MAX_ITEMS) ? 'bg-white' : 'bg-gray-500'}`}></div>
-            ))}
-          </div>
+        </div>
+        {/* 점(Indicator) 표시 */}
+        <div className="mt-2 flex space-x-2">
+          {Array.from({ length: Math.ceil(videos.length / MAX_ITEMS - 1) }).map((_, index) => (
+            <div key={index} className={`size-2 rounded-full ${index === Math.floor(curIndex / MAX_ITEMS) ? 'bg-white' : 'bg-gray-500'}`}></div>
+          ))}
         </div>
       </div>
     </div>
