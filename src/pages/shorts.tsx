@@ -5,7 +5,7 @@ import { Video } from '../types/Video';
 import API_URL from '../config/env';
 import { RootState } from '../Redux/store/store';
 import { useSelector } from 'react-redux';
-import { useAddSubscriptionMutation } from '../Redux/slice/subApi';
+import { useAddSubscriptionMutation, useRemoveSubscriptionMutation } from '../Redux/slice/subApi';
 
 interface ParentContext {
   updateRenderKey: () => void;
@@ -17,7 +17,9 @@ function Shorts() {
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const [addSubscription] = useAddSubscriptionMutation();
+  const [removeSubscription] = useRemoveSubscriptionMutation();
   const { updateRenderKey } = useOutletContext<ParentContext>();
+  const subscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions);
 
   if (!currentVideo) {
     return (
@@ -34,6 +36,7 @@ function Shorts() {
   };
 
   const userId = currentVideo.userId;
+  const followId = subscriptions.find(sub => sub.followedUserId === userId)?.id;
 
   const subscribeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +52,18 @@ function Shorts() {
     }
   };
 
+  const unsubscribeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (followId) {
+      try {
+        await removeSubscription({ followId }).unwrap();
+        updateRenderKey();
+      } catch (err) {
+        console.error('구독 취소 실패:', err);
+      }
+    }
+  };
+
   return (
     <div className="flex size-full">
       {/* 동영상 div */}
@@ -58,11 +73,17 @@ function Shorts() {
         <div className="absolute bottom-2 z-10 w-full max-w-full space-y-2 rounded px-5 py-4 text-white">
           <div className="flex items-center">
             <div className="overflow-hidden truncate pr-3 text-lg font-bold">{videoData.channelName}</div>
-            <button onClick={subscribeSubmit} className="rounded-full bg-white px-4 py-1 text-sm text-black hover:bg-gray-200">
-              구독
-            </button>
+            {followId ? (
+              <button onClick={unsubscribeSubmit} className="rounded-full bg-menubar-highlight px-4 py-1 text-sm text-white">
+                구독중
+              </button>
+            ) : (
+              <button onClick={subscribeSubmit} className="rounded-full bg-white px-4 py-1 text-sm text-black hover:bg-gray-200">
+                구독
+              </button>
+            )}
           </div>
-          <div className="overflow-hidden truncate text-xl">{videoData.title}</div>
+          <div className="overflow-hidden truncate text-base">{videoData.title}</div>
         </div>
       </div>
     </div>
