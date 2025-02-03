@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { RootState } from '../Redux/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearAuth } from '../Redux/slice/authSlice';
@@ -7,6 +7,11 @@ import { fetchVideoMetadataById } from '../api/videoApi';
 import { Video } from '../types/Video';
 import VideoCard from '../components/VideoCard';
 import { clearSubscriptions } from '../Redux/slice/subSlice';
+import { useAddSubscriptionMutation, useRemoveSubscriptionMutation } from '../Redux/slice/subApi';
+
+interface ParentContext {
+  updateRenderKey: () => void;
+}
 
 function App() {
   const { id: userId } = useParams<{ id: string }>();
@@ -17,8 +22,43 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [curIndex, setCurrentIndex] = useState(0); // 현재 첫 번째 비디오 인덱스
+  const [addSubscription] = useAddSubscriptionMutation();
+  const [removeSubscription] = useRemoveSubscriptionMutation();
+  const subscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions);
+  const navigate = useNavigate();
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+  const { updateRenderKey } = useOutletContext<ParentContext>();
 
   const MAX_ITEMS = 4; // 한 번에 보이는 비디오 수
+
+  const followId = subscriptions.find(sub => sub.followedUserId === userId)?.id;
+
+  const subscribeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!accessToken) {
+      navigate('/login');
+      return;
+    } else if (userId) {
+      try {
+        await addSubscription({ targetUserId: userId }).unwrap();
+        updateRenderKey();
+      } catch (err) {
+        console.error('구독 실패:', err);
+      }
+    }
+  };
+
+  const unsubscribeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (followId) {
+      try {
+        await removeSubscription({ followId }).unwrap();
+        updateRenderKey();
+      } catch (err) {
+        console.error('구독 취소 실패:', err);
+      }
+    }
+  };
 
   const handleLogout = () => {
     dispatch(clearAuth());
@@ -75,6 +115,16 @@ function App() {
       {/* header */}
       <div className="flex h-32 min-h-32 w-full items-center border-b-2 border-white">
         <div className="flex h-full items-center pl-14 pr-3 text-4xl font-bold text-white">{userId}</div>
+        {followId ? (
+          <button onClick={unsubscribeSubmit} className="rounded-full bg-menubar-highlight px-4 py-1 text-sm text-white">
+            구독중
+          </button>
+        ) : (
+          <button onClick={subscribeSubmit} className="rounded-full bg-white px-4 py-1 text-sm text-black hover:bg-gray-200">
+            구독
+          </button>
+        )}
+
         {userId === myId && (
           <div className="flex h-full items-center">
             <button className="border-b-2 border-dopameme-bg text-white hover:border-white" onClick={handleLogout}>
