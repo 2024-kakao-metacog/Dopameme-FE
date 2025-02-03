@@ -9,14 +9,7 @@ interface FollowResponse {
   snippet: { id: number; followedUserId: string; followedNickname: string; createdAt: string };
 }
 interface UnfollowRequest {
-  followerId: number;
-}
-
-interface UnfollowResponse {
-  data: unknown;
-  headers: {
-    authorization: string;
-  };
+  followId: number;
 }
 
 interface FollowsResponse {
@@ -45,11 +38,11 @@ export const subscriptionApi = createApi({
       }),
     }),
 
-    removeSubscription: builder.mutation<UnfollowResponse, UnfollowRequest>({
-      query: ({ followerId }) => ({
+    removeSubscription: builder.mutation<void, UnfollowRequest>({
+      query: ({ followId }) => ({
         url: `v1/follow`,
         method: 'DELETE',
-        params: { followerId },
+        params: { followId },
       }),
     }),
 
