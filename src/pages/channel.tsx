@@ -8,6 +8,8 @@ import { Video } from '../types/Video';
 import VideoCard from '../components/VideoCard';
 import { clearSubscriptions } from '../Redux/slice/subSlice';
 import { useAddSubscriptionMutation, useRemoveSubscriptionMutation } from '../Redux/slice/subApi';
+import axios from 'axios';
+import API_URL from '../config/env';
 
 interface ParentContext {
   updateRenderKey: () => void;
@@ -28,10 +30,31 @@ function App() {
   const navigate = useNavigate();
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const { updateRenderKey } = useOutletContext<ParentContext>();
+  const [nickname, setNickname] = useState<string>('');
 
   const MAX_ITEMS = 4; // 한 번에 보이는 비디오 수
 
   const followId = subscriptions.find(sub => sub.followedUserId === userId)?.id;
+
+  const fetchUserNickname = async () => {
+    try {
+      // API 호출을 통해 닉네임 정보 가져오기
+      const response = await axios.get(`${API_URL}v1/user`, {
+        params: { userId: userId },
+      });
+      setNickname(response.data.snippet.nickname);
+    } catch (error) {
+      console.error('닉네임 가져오기 실패:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (!videos || videos.length === 0) {
+      fetchUserNickname();
+    } else {
+      setNickname(videos[0].userNickname);
+    }
+  }, [videos]);
 
   const subscribeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,16 +137,17 @@ function App() {
     <div className="flex size-full flex-col">
       {/* header */}
       <div className="flex h-32 min-h-32 w-full items-center border-b-2 border-white">
-        <div className="flex h-full items-center pl-14 pr-3 text-4xl font-bold text-white">{userId}</div>
-        {followId ? (
-          <button onClick={unsubscribeSubmit} className="rounded-full bg-menubar-highlight px-4 py-1 text-sm text-white">
-            구독중
-          </button>
-        ) : (
-          <button onClick={subscribeSubmit} className="rounded-full bg-white px-4 py-1 text-sm text-black hover:bg-gray-200">
-            구독
-          </button>
-        )}
+        <div className="flex h-full items-center pl-14 pr-3 text-4xl font-bold text-white">{nickname}</div>
+        {userId !== myId &&
+          (followId ? (
+            <button onClick={unsubscribeSubmit} className="rounded-full bg-menubar-highlight px-4 py-1 text-sm text-white">
+              구독중
+            </button>
+          ) : (
+            <button onClick={subscribeSubmit} className="rounded-full bg-white px-4 py-1 text-sm text-black hover:bg-gray-200">
+              구독
+            </button>
+          ))}
 
         {userId === myId && (
           <div className="flex h-full items-center">
