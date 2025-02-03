@@ -2,11 +2,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import API_URL from '../../config/env';
 
 interface FollowRequest {
-  followerId: number;
+  targetUserId: string;
 }
 
 interface FollowResponse {
-  snippet: { id: number; followedUserId: string; followedNickname: string }[];
+  snippet: { id: number; followedUserId: string; followedNickname: string; createdAt: string };
 }
 interface UnfollowRequest {
   followerId: number;
@@ -38,10 +38,10 @@ export const subscriptionApi = createApi({
   }), // API 기본 URL 설정
   endpoints: builder => ({
     addSubscription: builder.mutation<FollowResponse, FollowRequest>({
-      query: ({ followerId }) => ({
+      query: ({ targetUserId }) => ({
         url: 'v1/follow',
         method: 'POST',
-        params: { followerId },
+        params: { userId: targetUserId },
       }),
     }),
 

@@ -5,12 +5,19 @@ import { Video } from '../types/Video';
 import API_URL from '../config/env';
 import { RootState } from '../Redux/store/store';
 import { useSelector } from 'react-redux';
+import { useAddSubscriptionMutation } from '../Redux/slice/subApi';
+
+interface ParentContext {
+  updateRenderKey: () => void;
+}
 
 function Shorts() {
   const { currentVideo } = useOutletContext<{ currentVideo: Video }>();
   const { videoUrl } = useParams();
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
+  const [addSubscription] = useAddSubscriptionMutation();
+  const { updateRenderKey } = useOutletContext<ParentContext>();
 
   if (!currentVideo) {
     return (
@@ -26,11 +33,19 @@ function Shorts() {
     channelName: currentVideo.userNickname,
   };
 
+  const userId = currentVideo.userId;
+
   const subscribeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!accessToken) {
       navigate('/login');
       return;
+    }
+    try {
+      await addSubscription({ targetUserId: userId }).unwrap();
+      updateRenderKey();
+    } catch (err) {
+      console.error('구독 실패:', err);
     }
   };
 
