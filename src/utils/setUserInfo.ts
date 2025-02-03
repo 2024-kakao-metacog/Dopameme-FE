@@ -17,7 +17,6 @@ export const getInfoByToken = () => async (dispatch: AppDispatch) => {
       const response = await axios.get(`${API_URL}v1/user`, {
         params: { userId: userId },
       });
-      console.log(response);
       const nickname = response.data.snippet.nickname || 'user';
 
       // 액션 디스패치
