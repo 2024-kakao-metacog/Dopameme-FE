@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../assets/logo_main.svg';
 import { Outlet } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -14,9 +14,13 @@ function App() {
   const { accessToken, nickname, id } = useSelector((state: RootState) => state.auth);
   const subscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions); // 구독 목록 가져오기
   const dispatch = useAppDispatch();
-  const { data } = useGetSubscriptionsQuery(undefined, { skip: !accessToken });
+  const { data, refetch } = useGetSubscriptionsQuery(undefined, { skip: !accessToken });
+  const [renderKey, setRenderKey] = useState<number>(0);
 
-  console.log('구독리스트', data?.snippet);
+  const updateRenderKey = () => {
+    setRenderKey(prev => prev + 1); // 상태 변경
+  };
+
   useEffect(() => {
     // accessToken이 null일 때만 getInfoByToken 실행
     if (!accessToken || !id || !nickname) {
@@ -24,6 +28,12 @@ function App() {
       dispatch(getInfoByToken());
     }
   }, [dispatch, accessToken, id, nickname]);
+
+  useEffect(() => {
+    if (accessToken) {
+      refetch(); // renderKey 변경 시, refetch 호출
+    }
+  }, [renderKey, accessToken, refetch]);
 
   useEffect(() => {
     if (data?.snippet) {
@@ -66,7 +76,7 @@ function App() {
           </div>
           <hr className="my-4 border-t-2" />
           {/* sub list */}
-          <div>
+          <div key={renderKey}>
             <div className="mb-1 rounded-md p-1 text-base font-bold text-kakao-yellow">구독</div>
             {subscriptions && subscriptions.length > 0 ? (
               subscriptions.map(subscription => (
@@ -84,7 +94,7 @@ function App() {
       </div>
       {/* contents area */}
       <div className="h-full flex-1">
-        <Outlet />
+        <Outlet context={{ updateRenderKey }} />
       </div>
     </div>
   );

@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Outlet, useLocation, useParams, useNavigationType } from 'react-router-dom';
+import { Outlet, useLocation, useParams, useNavigationType, useOutletContext } from 'react-router-dom';
 import { Video } from '../types/Video';
 import { fetchVideoMetadata, fetchVideoMetadataByUrl } from '../api/videoApi';
 import { ReactComponent as NextButton } from '../assets/next_video_button.svg';
 import { ReactComponent as PrevButton } from '../assets/prev_video_button.svg';
+
+interface ParentContext {
+  updateRenderKey: () => void;
+}
 
 function ShortsManager() {
   const location = useLocation();
@@ -14,6 +18,7 @@ function ShortsManager() {
   const [isScrolling, setIsScrolling] = useState<boolean>(false); // 스크롤 딜레이 상태
   const [translateY, setTranslateY] = useState<number>(0); // 애니메이션 Y축 이동값
   const [isAnimating, setIsAnimating] = useState<boolean>(false); // 애니메이션 상태
+  const { updateRenderKey } = useOutletContext<ParentContext>();
 
   // 현재 인덱스에 해당하는 비디오
   const curVideo = videoList[curIndex] || null;
@@ -186,7 +191,7 @@ function ShortsManager() {
           }}
         >
           {/* 하위 컴포넌트로 상태 전달 */}
-          <Outlet context={{ currentVideo: curVideo }} />
+          <Outlet context={{ currentVideo: curVideo, updateRenderKey }} />
         </div>
       </div>
       {/* 탐색 버튼 */}
